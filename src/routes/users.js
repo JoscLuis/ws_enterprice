@@ -50,7 +50,6 @@ router.put("/editProfile", function (req, res) {
     }
   );
 });
-
 // DELETE USER
 router.post('/deleteUser', (req, res) => {
   var userid = req.body.userid;
@@ -59,6 +58,37 @@ router.post('/deleteUser', (req, res) => {
     res.status("200").send(rows);
   });
 });
+// Clients
+// GET all clients active
+router.get('/clients', (req, res) => {
+  mysqlConnection.query('SELECT * FROM clients WHERE status = 1', (err, rows, fields) => {
+    if (!err) {
+      res.json(rows);
+    } else {
+      console.log(err);
+    }
+  });
+});
+// 
+router.get('/allClients', (req, res) => {
+  mysqlConnection.query('SELECT * FROM clients', (err, rows, fields) => {
+    if (!err) {
+      res.json(rows);
+    } else {
+      console.log(err);
+    }
+  });
+});
 
+router.post('/clientTrash', (req, res) => {
+  var idclient = req.body.idclient;
+  mysqlConnection.query('UPDATE clients SET status = 0 WHERE idclient = ?', idclient, (err, rows, fields) => {
+    if (!err) {
+      res.json(rows);
+    } else {
+      console.log(err);
+    }
+  });
+});
 
 module.exports = router;
